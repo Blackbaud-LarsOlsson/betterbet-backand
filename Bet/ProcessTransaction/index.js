@@ -12,27 +12,39 @@ exports.backandCallback = function(dbRow, parameters, userProfile, response) {
     
     // Bellow is an example of how to handle success and failure of your code
 
-    var runBackandSDKDemo = false;
+    var fs = require('fs');
 
-    if (runBackandSDKDemo) {
-        backandCrudDemo()
-        .then(function(result) {
-            /* response to exist the action */ response(null, {"message": "Backand SDK Demo Finished"})
+    var json = backand.get('/1/objects/Card/1/');
+    var card = JSON.parse(json);
+    
+    var token = card.field.token;
+    var ip = ""; //do this later
+    var merchantID ="";
+    var transactionType = "";
+    var amount = "";
+    
+    var args = new Array();
+    args['DonorIPAddress'] = ip;
+    args['CardToken'] = token;
+    args['MerchantAccountID'] = merchantID;
+    args['TransactionType'] = transactionType;
+    args['Amount'] = amount;
+    
+    var soap = require('soap');
+    var restClient = require('node-rest-client').Client;
+
+    function callSoapService(wsdl, methodName, args)
+    {
+        soap.createClient(wsdl, function(err, client) {
+            client[methodName](args, function(err, result) {
+                console.log(result);
+            });
         });
     }
-    else {
-        // a response data example
-        var helloWorld = {"message": "Hello World!"};
 
-        // error handling
-        if (!helloWorld) {
-            response({errorMessage: "An error occurred"}, null);
-        }
-        // success handling
-        else {
-            response(null, helloWorld);
-        }
-    }
+    var wsdl = 'http://www.xmlme.com/WSDailyNet.asmx?WSDL'; //dunno what we want for this
+
+    callSoapService(wsdl, 'ProcessCardNotPresent', {});
 }
 
 // To run a demo of how to perform CRUD (Create, Read, Update and Delete) with Backand SDK, do the following:
