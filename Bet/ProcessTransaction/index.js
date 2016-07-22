@@ -44,7 +44,7 @@ exports.backandCallback = function(dbRow, parameters, userProfile, response) {
 
     var wsdl = 'http://www.xmlme.com/WSDailyNet.asmx?WSDL'; //dunno what we want for this
 
-    callSoapService(wsdl, 'ProcessCardNotPresent', {});
+    callSoapService(wsdl, 'ProcessCardNotPresent', args);
 }
 
 // To run a demo of how to perform CRUD (Create, Read, Update and Delete) with Backand SDK, do the following:
